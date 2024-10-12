@@ -563,6 +563,13 @@
                                 <input id="resend-interval" v-model="monitor.resendInterval" type="number" class="form-control" required min="0" step="1">
                             </div>
 
+                            <div class="my-3">
+                                <label for="fail-before-notification" class="form-label">
+                                    {{ $t("Notification if Down X times consecutively") }}
+                                </label>
+                                <input id="fail-before-notification" v-model="monitor.failBeforeNotification" type="number" class="form-control" required min="0" step="1">
+                            </div>
+
                             <h2 v-if="monitor.type !== 'push'" class="mt-5 mb-2">{{ $t("Advanced") }}</h2>
 
                             <div v-if="monitor.type === 'http' || monitor.type === 'keyword' || monitor.type === 'json-query' " class="my-3 form-check" :title="monitor.ignoreTls ? $t('ignoredTLSError') : ''">
@@ -1092,6 +1099,7 @@ const monitorDefaults = {
     interval: 60,
     retryInterval: 60,
     resendInterval: 0,
+    retryBeforeNotification: 0,
     maxretries: 0,
     notificationIDList: {},
     ignoreTls: false,

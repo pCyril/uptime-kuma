@@ -90,6 +90,7 @@
     "Retries": "Essais",
     "Heartbeat Retry Interval": "Intervalle de ré-essai",
     "Resend Notification if Down X times consecutively": "Renvoyer la notification si hors ligne X fois consécutivement",
+    "Notification if Down X times consecutively": "Envoyer la notification si hors ligne X fois consécutivement",
     "Advanced": "Avancé",
     "Upside Down Mode": "Mode inversé",
     "Max. Redirects": "Nombre maximum de redirections",

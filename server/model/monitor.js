@@ -108,6 +108,7 @@ class Monitor extends BeanModel {
             interval: this.interval,
             retryInterval: this.retryInterval,
             resendInterval: this.resendInterval,
+            failBeforeNotification: this.failBeforeNotification,
             keyword: this.keyword,
             invertKeyword: this.isInvertKeyword(),
             expiryNotification: this.isEnabledExpiryNotification(),
@@ -314,6 +315,13 @@ class Monitor extends BeanModel {
      */
     getKafkaProducerAllowAutoTopicCreation() {
         return Boolean(this.kafkaProducerAllowAutoTopicCreation);
+    }
+
+    async getPreviousBeats(limit) {
+        return R.find("heartbeat", " monitor_id = ? ORDER BY time DESC LIMIT ? ", [
+            this.id,
+            limit,
+        ]);
     }
 
     /**
@@ -917,7 +925,10 @@ class Monitor extends BeanModel {
             if (isImportant) {
                 bean.important = true;
 
-                if (Monitor.isImportantForNotification(isFirstBeat, previousBeat?.status, bean.status)) {
+                const latestBeats = await this.getPreviousBeats(this.failBeforeNotification);
+                if (Monitor.isImportantForNotification(isFirstBeat, previousBeat?.status, bean.status) && (latestBeats.length > 0 && latestBeats.filter((beat) => {
+                    return Monitor.isImportantForNotification(isFirstBeat, beat.status, bean.status);
+                }).length === this.failBeforeNotification) ) {
                     log.debug("monitor", `[${this.name}] sendNotification`);
                     await Monitor.sendNotification(isFirstBeat, this, bean);
                 } else {

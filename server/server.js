@@ -805,6 +805,7 @@ let needSetup = false;
                 bean.interval = monitor.interval;
                 bean.retryInterval = monitor.retryInterval;
                 bean.resendInterval = monitor.resendInterval;
+                bean.failBeforeNotification = monitor.failBeforeNotification;
                 bean.hostname = monitor.hostname;
                 bean.game = monitor.game;
                 bean.maxretries = monitor.maxretries;
@@ -878,6 +879,7 @@ let needSetup = false;
                     await Monitor.unlinkAllChildren(monitor.id);
                 }
 
+                console.log('monitor.notificationIDList', monitor.notificationIDList);
                 await updateMonitorNotification(bean.id, monitor.notificationIDList);
 
                 if (await Monitor.isActive(bean.id, bean.active)) {
